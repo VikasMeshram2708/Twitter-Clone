@@ -32,9 +32,9 @@ export default function SideBar() {
   return (
     <div className="min-h-screen w-64 bg-background border-r flex flex-col">
       {/* Logo Area */}
-      <div className="p-6 border-b">
+      {/* <div className="p-6 border-b">
         <h2 className="text-lg font-semibold">Dashboard</h2>
-      </div>
+      </div> */}
 
       {/* Navigation Items */}
       <nav className="flex-1 p-4">
