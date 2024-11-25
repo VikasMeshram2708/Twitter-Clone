@@ -62,96 +62,100 @@ export default function AddPost() {
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto shadow-lg">
-      <CardContent className="p-4">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="space-y-4">
-            <Input
-              className={`rounded-2xl border-2 focus-visible:ring-0 min-h-[50px] px-4 py-2 transition-all duration-200 ${
-                isExpanded ? "min-h-[100px]" : ""
-              }`}
-              {...register("content", { required: true })}
-              placeholder="What's on your mind?"
-              onFocus={() => setIsExpanded(true)}
-            />
-            {errors.content && (
-              <Alert variant="destructive">
-                <AlertDescription>Content is required</AlertDescription>
-              </Alert>
-            )}
-
-            {mediaType === "photo" && (
+    <>
+      <Card className="w-full max-w-2xl mx-auto shadow-lg">
+        <CardContent className="p-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="space-y-4">
               <Input
-                {...register("img_url", {
-                  pattern: /^(http|https):\/\/[^ "]+$/,
-                })}
-                placeholder="Enter image URL"
+                className={`rounded-2xl border-2 focus-visible:ring-0 min-h-[50px] px-4 py-2 transition-all duration-200 ${
+                  isExpanded ? "min-h-[100px]" : ""
+                }`}
+                {...register("content", { required: true })}
+                placeholder="What's on your mind?"
+                onFocus={() => setIsExpanded(true)}
               />
-            )}
+              {errors.content && (
+                <Alert variant="destructive">
+                  <AlertDescription>Content is required</AlertDescription>
+                </Alert>
+              )}
 
-            {mediaType === "video" && (
-              <Input
-                {...register("video_url", {
-                  pattern: /^(http|https):\/\/[^ "]+$/,
-                })}
-                placeholder="Enter video URL"
-              />
-            )}
+              {mediaType === "photo" && (
+                <Input
+                  {...register("img_url", {
+                    pattern: /^(http|https):\/\/[^ "]+$/,
+                  })}
+                  placeholder="Enter image URL"
+                />
+              )}
 
-            {error && (
-              <Alert
-                variant={error.includes("success") ? "default" : "destructive"}
-              >
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-          </div>
+              {mediaType === "video" && (
+                <Input
+                  {...register("video_url", {
+                    pattern: /^(http|https):\/\/[^ "]+$/,
+                  })}
+                  placeholder="Enter video URL"
+                />
+              )}
 
-          <div className="flex items-center justify-between">
-            <div className="flex gap-2">
-              <Button
-                type="button"
-                variant={mediaType === "photo" ? "default" : "ghost"}
-                onClick={() =>
-                  setMediaType(mediaType === "photo" ? null : "photo")
-                }
-              >
-                <ImageIcon className="h-5 w-5 mr-2" /> Photo
-              </Button>
-              <Button
-                type="button"
-                variant={mediaType === "video" ? "default" : "ghost"}
-                onClick={() =>
-                  setMediaType(mediaType === "video" ? null : "video")
-                }
-              >
-                <VideoIcon className="h-5 w-5 mr-2" /> Video
-              </Button>
+              {error && (
+                <Alert
+                  variant={
+                    error.includes("success") ? "default" : "destructive"
+                  }
+                >
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
             </div>
 
-            <div className="flex gap-2">
-              {(isExpanded || content) && (
+            <div className="flex items-center justify-between">
+              <div className="flex gap-2">
                 <Button
                   type="button"
-                  variant="ghost"
-                  onClick={() => {
-                    reset();
-                    setMediaType(null);
-                    setIsExpanded(false);
-                    setError("");
-                  }}
+                  variant={mediaType === "photo" ? "default" : "ghost"}
+                  onClick={() =>
+                    setMediaType(mediaType === "photo" ? null : "photo")
+                  }
                 >
-                  Cancel <X className="h-4 w-4" />
+                  <ImageIcon className="h-5 w-5 mr-2" /> Photo
                 </Button>
-              )}
-              <Button type="submit" disabled={isLoading || !content.trim()}>
-                {isLoading ? "Posting..." : "Post"}{" "}
-                <SendHorizontal className="h-4 w-4" />
-              </Button>
+                <Button
+                  type="button"
+                  variant={mediaType === "video" ? "default" : "ghost"}
+                  onClick={() =>
+                    setMediaType(mediaType === "video" ? null : "video")
+                  }
+                >
+                  <VideoIcon className="h-5 w-5 mr-2" /> Video
+                </Button>
+              </div>
+
+              <div className="flex gap-2">
+                {(isExpanded || content) && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    onClick={() => {
+                      reset();
+                      setMediaType(null);
+                      setIsExpanded(false);
+                      setError("");
+                    }}
+                  >
+                    Cancel <X className="h-4 w-4" />
+                  </Button>
+                )}
+                <Button type="submit" disabled={isLoading || !content.trim()}>
+                  {isLoading ? "Posting..." : "Post"}{" "}
+                  <SendHorizontal className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+          </form>
+        </CardContent>
+      </Card>
+    </>
   );
 }
