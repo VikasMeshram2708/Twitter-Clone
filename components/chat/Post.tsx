@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import React from "react";
 import {
   Card,
   CardContent,
@@ -8,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import {
   Bookmark,
@@ -27,21 +25,55 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  useDeletePostMutation,
+  useFetchAllPostsQuery,
+} from "@/app/store/chats/chatSlice";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function Post() {
   const { data: currUser } = useSession();
-  const { data, isLoading } = useQuery<Post>({
-    queryKey: ["Chat"],
-    queryFn: async () => {
-      const res = await fetch("/api/ch/readall");
-      const result = await res.json();
-      return result;
-    },
-  });
+  const { data, isLoading } = useFetchAllPostsQuery();
+  const [isOwner, setIsOwner] = useState(false);
+
+  const [deletePost, { error }] = useDeletePostMutation();
+
+  function handleDropDown(userPostId: number) {
+    const postUserId = userPostId;
+    // @ts-ignore
+    const currentUserId = currUser?.user?.id;
+
+    if (postUserId == currentUserId) {
+      setIsOwner(true);
+    } else {
+      setIsOwner(false);
+    }
+  }
+
+  async function handleDelete(postId: number) {
+    console.log("did", postId);
+    const res = await deletePost({ chatId: postId });
+    console.log("res", res);
+    console.log("err", error);
+
+    if (!res || res.error) {
+      return toast.error(
+        String(res?.data) || "An Error Occurred. Failed to Delete Post"
+      );
+    }
+
+    return toast.success(res?.data || "Post Deleted");
+  }
 
   if (isLoading) {
-    return <p className="loader"></p>;
+    return (
+      <div className="container max-w-2xl mx-auto">
+        <p className="loader"></p>;
+      </div>
+    );
   }
+
   return (
     <div className="container max-w-2xl mx-auto">
       {data?.posts?.map((post) => (
@@ -61,9 +93,9 @@ export default function Post() {
                   <span>@{currUser?.user?.username || "Anonymous"}</span>
                 </CardTitle>
               </div>
-              <DropdownMenu>
+              <DropdownMenu onOpenChange={() => handleDropDown(post?.User?.id)}>
                 <DropdownMenuTrigger asChild>
-                  <Button variant={"ghost"}>
+                  <Button type="submit">
                     <EllipsisVertical />
                   </Button>
                 </DropdownMenuTrigger>
@@ -72,6 +104,11 @@ export default function Post() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>Visit Profile</DropdownMenuItem>
                   <DropdownMenuItem>Report Post</DropdownMenuItem>
+                  {isOwner && (
+                    <DropdownMenuItem onClick={() => handleDelete(post?.id)}>
+                      Delete Post
+                    </DropdownMenuItem>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

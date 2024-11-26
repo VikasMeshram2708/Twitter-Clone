@@ -8,10 +8,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { createPostSchema } from "@/app/models/ChatSchema";
+import { useCreatePostMutation } from "@/app/store/chats/chatSlice";
+import toast from "react-hot-toast";
 
 export default function AddPost() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
   const [mediaType, setMediaType] = useState<"photo" | "video" | null>(null);
 
@@ -31,33 +31,16 @@ export default function AddPost() {
 
   const content = watch("content");
 
+  const [createPost, { isLoading, error, isError }] = useCreatePostMutation();
+
   const onSubmit: SubmitHandler<createPostSchema> = async (data) => {
-    setIsLoading(true);
-    setError("");
-
     try {
-      const res = await fetch("/api/ch/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to create post");
-      }
-
+      const result = await createPost(data).unwrap();
       reset();
-      setMediaType(null);
-      setIsExpanded(false);
-      setError("Post created successfully!");
+      setIsExpanded(false)
+      return toast.success(result?.message || "Post Created");
     } catch (error) {
-      // @ts-ignore
-
-      setError(error.message || "An error occurred");
-    } finally {
-      setIsLoading(false);
+      console.error(`Something went wrong. Please try again. ${error}`);
     }
   };
 
@@ -99,13 +82,11 @@ export default function AddPost() {
                 />
               )}
 
-              {error && (
-                <Alert
-                  variant={
-                    error.includes("success") ? "default" : "destructive"
-                  }
-                >
-                  <AlertDescription>{error}</AlertDescription>
+              {isError && (
+                <Alert variant="destructive">
+                  <AlertDescription>
+                    {String(error) || "An error occurred while posting"}
+                  </AlertDescription>
                 </Alert>
               )}
             </div>
@@ -141,7 +122,6 @@ export default function AddPost() {
                       reset();
                       setMediaType(null);
                       setIsExpanded(false);
-                      setError("");
                     }}
                   >
                     Cancel <X className="h-4 w-4" />

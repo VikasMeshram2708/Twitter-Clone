@@ -25,6 +25,15 @@ export const GET = async (request: NextRequest) => {
         orderBy: { createdAt: "desc" },
         skip,
         take,
+        include: {
+          User: {
+            select: {
+              id: true,
+              username: true,
+              email: true,
+            },
+          },
+        },
       }),
       prismaInstance.chat.count(),
     ]);

@@ -9,17 +9,27 @@ interface Token {
   jti: string;
 }
 
+interface CustomResponse {
+  message: string;
+  status: number;
+}
+
 interface Post {
   posts: [
     {
-      id: 1;
-      content: "hey";
-      img_url: "";
-      video_url: "";
-      createdAt: "2024-11-24T14:28:23.975Z";
-      updatedAt: "2024-11-24T14:28:23.975Z";
-      userId: 1;
+      id: number;
+      content: string;
+      img_url: string;
+      video_url: string;
+      createdAt: string;
+      updatedAt: string;
+      userId: number;
+      User: {
+        id: number;
+        username: string;
+        email: string;
+      };
     }
   ];
-  totalCount: 1;
+  totalCount: number;
 }
