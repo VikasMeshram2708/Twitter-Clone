@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: "https://ucarecdn.com",
+        hostname: "ucarecdn.com",
         protocol: "https",
       },
     ],
