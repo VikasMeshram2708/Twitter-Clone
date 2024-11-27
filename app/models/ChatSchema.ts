@@ -9,13 +9,11 @@ export const createPostSchema = z.object({
   img_url: z
     .string()
     .url({ message: "Invalid URL format for the image." })
-    .optional()
     .nullable()
     .or(z.literal("")),
   video_url: z
     .string()
     .url({ message: "Invalid URL format for the video." })
-    .optional()
     .nullable()
     .or(z.literal("")),
 });

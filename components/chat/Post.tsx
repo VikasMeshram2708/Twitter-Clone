@@ -71,7 +71,7 @@ export default function Post() {
   if (isLoading) {
     return (
       <div className="container max-w-2xl mx-auto">
-        <p className="loader"></p>;
+        <p className="loader"></p>
       </div>
     );
   }
