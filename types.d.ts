@@ -33,3 +33,16 @@ interface Post {
   ];
   totalCount: number;
 }
+
+interface Me {
+  data: {
+    id: number;
+    email: string;
+    username: string;
+    createdAt: string;
+    updatedAt: string;
+    _count: {
+      chat: number;
+    };
+  };
+}

@@ -1,15 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { chatSlice } from "./chats/chatSlice";
+import { userSlice } from "./user/userSlice";
 
 export const store = configureStore({
   reducer: {
     [chatSlice.reducerPath]: chatSlice.reducer,
+    [userSlice.reducerPath]: userSlice.reducer,
   },
 
-  middleware: (getDeafultMiddleware) => {
-    return getDeafultMiddleware().concat(chatSlice.middleware);
+  middleware: (getDefaultMiddlware) => {
+    return getDefaultMiddlware().concat(
+      chatSlice.middleware,
+      userSlice.middleware
+    );
   },
 });
-
-export type RootType = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
