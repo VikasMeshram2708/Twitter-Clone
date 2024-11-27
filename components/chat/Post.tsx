@@ -1,4 +1,6 @@
+"use client";
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+
 import {
   Card,
   CardContent,
@@ -95,7 +97,7 @@ export default function Post() {
               </div>
               <DropdownMenu onOpenChange={() => handleDropDown(post?.User?.id)}>
                 <DropdownMenuTrigger asChild>
-                  <Button type="submit">
+                  <Button type="submit" variant={"ghost"}>
                     <EllipsisVertical />
                   </Button>
                 </DropdownMenuTrigger>
@@ -116,13 +118,14 @@ export default function Post() {
           </CardHeader>
           <CardContent>
             {post.img_url && (
-              <Image
-                src={post.img_url}
-                alt={post.content}
-                width={500}
-                height={500}
-                className="rounded object-contain"
-              />
+              <div className="aspect-video relative">
+                <Image
+                  src={post.img_url}
+                  alt={post.content}
+                  layout="fill"
+                  className="rounded bg-cover object-contain"
+                />
+              </div>
             )}
           </CardContent>
           <CardFooter className="flex items-center justify-between">

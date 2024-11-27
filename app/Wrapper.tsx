@@ -15,7 +15,9 @@ export default function Wrapper({
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider>
-        <Provider store={store}>{children}</Provider>
+        <Provider store={store}>
+            {children}
+        </Provider>
       </SessionProvider>
       <Toaster position="top-right" />
     </QueryClientProvider>

@@ -33,11 +33,15 @@ export default function AddPost() {
 
   const [createPost, { isLoading, error, isError }] = useCreatePostMutation();
 
+  function handleCommingSoon() {
+    return toast.success("Coming Soon");
+  }
+
   const onSubmit: SubmitHandler<createPostSchema> = async (data) => {
     try {
       const result = await createPost(data).unwrap();
       reset();
-      setIsExpanded(false)
+      setIsExpanded(false);
       return toast.success(result?.message || "Post Created");
     } catch (error) {
       console.error(`Something went wrong. Please try again. ${error}`);
@@ -92,7 +96,7 @@ export default function AddPost() {
             </div>
 
             <div className="flex items-center justify-between">
-              <div className="flex gap-2">
+              <div onClick={handleCommingSoon} className="flex gap-2">
                 <Button
                   type="button"
                   variant={mediaType === "photo" ? "default" : "ghost"}
